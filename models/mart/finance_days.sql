@@ -1,24 +1,17 @@
 WITH daily_summary AS (
     SELECT
-            s.date_date,
-            COUNT(DISTINCT s.orders_id) AS total_number_of_transactions,
-            ROUND(SUM(s.revenue),2) AS total_revenue,
-            ROUND(SUM(s.quantity),2) AS total_quantity_of_products_sold,
-            ROUND(SUM(s.quantity * p.purchase_price),2) AS total_purchase_cost,
-            ROUND(SUM(sh.shipping_fee),2) AS total_shipping_fees,
-            ROUND(SUM(sh.logCost),2) AS total_log_costs,
-            -- Calcular Operational Margin: revenue - cost + shipping_fee
-            ROUND(SUM(s.revenue - (s.quantity * p.purchase_price) + sh.shipping_fee),2) AS operational_margin
+            date_date,
+            COUNT(DISTINCT orders_id) AS total_number_of_transactions,
+            ROUND(SUM(revenue),2) AS total_revenue,
+            ROUND(SUM(operational_margin),2) AS operational_margin,
+            ROUND(SUM(quantity),2) AS total_quantity_of_products_sold,
+            ROUND(SUM(purchase_cost),2) AS total_purchase_cost,
+            ROUND(SUM(shipping_fee),2) AS total_shipping_fees,
+            ROUND(SUM(logCost),2) AS total_log_costs
         FROM
-            {{ ref("stg_raw__sales") }} s
-        JOIN
-            {{ ref("stg_raw__product") }} p
-            ON s.products_id = p.products_id
-        JOIN
-            {{ ref("stg_raw__ship") }} sh
-            ON s.orders_id = sh.orders_id
+            {{ ref("int_orders_operational") }}
         GROUP BY
-            s.date_date
+            date_date
 )
 
 SELECT
