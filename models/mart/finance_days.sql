@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 WITH daily_summary AS (
     SELECT
             date_date,
