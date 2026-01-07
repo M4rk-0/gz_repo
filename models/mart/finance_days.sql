@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='finance_days') }}
 
 WITH daily_summary AS (
     SELECT
