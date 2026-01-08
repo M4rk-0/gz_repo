@@ -1,0 +1,33 @@
+version: 2
+sources:
+  - name: raw
+    database: refined-bolt-479015-v6
+    schema: gz_raw_data
+    loader: bigquery
+    tables:
+      - name: product
+        identifier: raw_gz_product
+        description: details about data produts. purchSE _PRICE, products_id 
+        tests:
+          - not_null:
+              column_name: products_id
+          - unique:
+              column_name: products_id
+      - name: sales
+        identifier: raw_gz_sales
+        description: details about data sales. date_date, orders_id, products_id, revenue, quantity
+        tests:
+          - not_null:
+              column_name: orders_id
+          - not_null:
+              column_name: products_id
+      - name: ship
+        identifier: raw_gz_ship
+        description: details about data ship. orders_id, shipping_fee, logCost, ship_cost
+        tests:
+          - not_null:
+              column_name: orders_id
+          - unique:
+              column_name: orders_id
+
+          
