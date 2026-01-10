@@ -5,6 +5,18 @@ sources:
     schema: gz_raw_data
     loader: bigquery
     tables:
+      - name: adwords
+        identifier: raw_gz_adwords
+        description: date_date, paid_source, campaign_key, campaign_name, ads_cost, impression, click
+      - name: bing
+        identifier: raw_gz_bing
+        description: date_date, paid_source, campaign_key, campaign_name, ads_cost, impression, click
+      - name: criteo
+        identifier: raw_gz_criteo
+        description: date_date, paid_source, campaign_key, campaign_name, ads_cost, impression, click
+      - name: facebook
+        identifier: raw_gz_facebook
+        description: date_date, paid_source, campaign_key, campaign_name, ads_cost, impression, click
       - name: product
         identifier: raw_gz_product
         description: details about data produts. purchSE _PRICE, products_id 
