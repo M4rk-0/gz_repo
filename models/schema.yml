@@ -8,6 +8,64 @@ sources:
       - name: adwords
         identifier: raw_gz_adwords
         description: date_date, paid_source, campaign_key, campaign_name, ads_cost, impression, click
+        columns:
+          - name: date_date
+            description: "Fecha de la métrica de campaña"
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  arguments:
+                    expression: "date_date <= CURRENT_DATE()"
+                  severity: warn                  
+          - name: paid_source
+            description: "Canal de publicidad"
+            tests:
+              - not_null
+              - dbt_utils.accepted_values:
+                  arguments:
+                    column_name: paid_source
+                    values: ["Adwords", "Bing", "Criteo", "Facebook"]
+                  severety: error
+          - name: campaign_key
+            description: "Identificador único de la campaña"
+            tests:
+              - not_null
+          - name: campaign_name
+            description: "Nombre legible de la campaña"
+            tests:
+              - not_null
+          - name: ads_cost
+            description: "Costo total de los anuncios en USD"
+            tests:
+                - not_null
+                - dbt_utils.expression_is_true:
+                    arguments:
+                      expression: "ads_cost >= 0"
+                    severity: error
+          - name: impression
+            description: "Número de impresiones"
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  arguments:
+                    expression: "impression >= 0"
+                  severity: error
+          - name: click
+            description: "Número de clics"
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  arguments:
+                    expression: "click >= 0"
+                  severity: error
+        tests:
+          - dbt_utils.unique_combination_of_columns:
+              arguments:
+                combination_of_columns:
+                  - date_date
+                  - campaign_key
+                  - paid_source
+              severity: error
       - name: bing
         identifier: raw_gz_bing
         description: date_date, paid_source, campaign_key, campaign_name, ads_cost, impression, click
